@@ -34,7 +34,7 @@ import jssdk from 'weixin-js-sdk';
 import 'whatwg-fetch';
 
 class JssdkHelper {
-  constructor(xhr, share, opts = {}) {
+  constructor(xhr, share, options = {}) {
     const state = {};
     const config = {};
 
@@ -54,11 +54,11 @@ class JssdkHelper {
       },
       imgUrl: share.imgUrl
     };
-    config.api = opts.api || ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone', 'showOptionMenu', 'hideOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem'];
-    config.hideMenu = _.isBoolean(opts.hideMenu) ? opts.hideMenu : false;
-    config.showBase = _.isBoolean(opts.showBase) ? opts.showBase : false;
-    config.hideItem = opts.hideItem || [];
-    config.showItem = opts.showItem || ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
+    config.api = options.api || ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone', 'showOptionMenu', 'hideOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem'];
+    config.hideMenu = _.isBoolean(options.hideMenu) ? options.hideMenu : false;
+    config.showBase = _.isBoolean(options.showBase) ? options.showBase : false;
+    config.hideItem = options.hideItem || [];
+    config.showItem = options.showItem || ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
 
     this.config = config;
     this.state = state;
