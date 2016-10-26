@@ -38,12 +38,12 @@ class JssdkHelper {
     const descElement = document.querySelector('meta[name="descripton"]');
 
     const title = config.title || document.title;
-    const desc = config.desc || (descElement ? ddescElement.content : document.title);
+    const desc = config.desc || (descElement ? descElement.content : document.title);
     const link = config.link || location.href;
     const callback = {
       success: config.callback ? config.callback.success || function() {} : function() {},
       cancel: config.callback ? config.callback.cancel || function() {} : function() {}
-    },
+    };
     const imgUrl = config.imgUrl;
 
     const apiList = _.isArray(options.apiList) || ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone', 'showOptionMenu', 'hideOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem'];
@@ -53,17 +53,17 @@ class JssdkHelper {
     const showItem = _.isArray(options.showItem) || ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
 
     this.share = {title, desc, link, callback, imgUrl};
-    this.config = {apiList, hideMenu, showBase, hideItemm, showItem};
+    this.config = {apiList, hideMenu, showBase, hideItem, showItem};
     this.state = {};
 
     this.initialize(request, settings);
   }
   initialize(request, settings) {
     this.pushState(request, settings);
-    this.updateShare(config.share);
+    this.updateShare(this.share);
   }
   pushState(request, settings) {
-    const {config} = {this.config};
+    const config = this.config;
 
     fetch(request, settings).then(response => {
       if (response.ok) {
@@ -83,7 +83,7 @@ class JssdkHelper {
     });
   }
   getState(...keys) {
-    const {state} = {this.state};
+    const state = this.state;
 
     if (keys.length === 0) {
       return state;
@@ -100,7 +100,9 @@ class JssdkHelper {
     }
   }
   updateShare(data) {
-    const {state, config, share} = {this.state, this.config, this.share};
+    const state = this.state;
+    const config = this.config;
+    const share = this.share;
 
     const title = state.title = data ? data.title || share.title : share.title;
     const desc = state.desc = data ? data.desc || share.desc : share.desc;

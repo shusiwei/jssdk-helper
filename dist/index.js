@@ -50,44 +50,48 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 var JssdkHelper = function () {
-  function JssdkHelper(url, init, share) {
+  function JssdkHelper(request) {
+    var settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var config = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
     var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
     _classCallCheck(this, JssdkHelper);
 
-    var config = {};
+    var descElement = document.querySelector('meta[name="descripton"]');
 
-    config.share = {
-      title: share.title || document.title,
-      desc: share.desc || (document.querySelector('meta[name="descripton"]') ? document.querySelector('meta[name="descripton"]').content : document.title),
-      link: share.link || location.href,
-      callback: {
-        success: share.callback ? share.callback.success || function () {} : function () {},
-        cancel: share.callback ? share.callback.cancel || function () {} : function () {}
-      },
-      imgUrl: share.imgUrl
+    var title = config.title || document.title;
+    var desc = config.desc || (descElement ? descElement.content : document.title);
+    var link = config.link || location.href;
+    var callback = {
+      success: config.callback ? config.callback.success || function () {} : function () {},
+      cancel: config.callback ? config.callback.cancel || function () {} : function () {}
     };
-    config.api = options.api || ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone', 'showOptionMenu', 'hideOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem'];
-    config.hideMenu = _lodash2.default.isBoolean(options.hideMenu) ? options.hideMenu : false;
-    config.showBase = _lodash2.default.isBoolean(options.showBase) ? options.showBase : false;
-    config.hideItem = options.hideItem || [];
-    config.showItem = options.showItem || ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
+    var imgUrl = config.imgUrl;
 
-    this.config = config;
+    var apiList = _lodash2.default.isArray(options.apiList) || ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone', 'showOptionMenu', 'hideOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem'];
+    var hideMenu = _lodash2.default.isBoolean(options.hideMenu) ? options.hideMenu : false;
+    var showBase = _lodash2.default.isBoolean(options.showBase) ? options.showBase : false;
+    var hideItem = _lodash2.default.isArray(options.hideItem) || [];
+    var showItem = _lodash2.default.isArray(options.showItem) || ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
+
+    this.share = { title: title, desc: desc, link: link, callback: callback, imgUrl: imgUrl };
+    this.config = { apiList: apiList, hideMenu: hideMenu, showBase: showBase, hideItem: hideItem, showItem: showItem };
     this.state = {};
 
-    this.initialize(url, init, config);
+    this.initialize(request, settings);
   }
 
-  JssdkHelper.prototype.initialize = function initialize(url, init, config) {
-    this.pushState(url, init, config.api);
-    this.updateShare(config.share);
+  JssdkHelper.prototype.initialize = function initialize(request, settings) {
+    this.pushState(request, settings);
+    this.updateShare(this.share);
   };
 
-  JssdkHelper.prototype.pushState = function pushState(url, init, api) {
+  JssdkHelper.prototype.pushState = function pushState(request, settings) {
     var _this = this;
 
-    fetch(url, init).then(function (response) {
+    var config = this.config;
+
+    fetch(request, settings).then(function (response) {
       _newArrowCheck(this, _this);
 
       if (response.ok) {
@@ -100,11 +104,11 @@ var JssdkHelper = function () {
             timestamp: response.timestamp,
             nonceStr: response.nonceStr,
             signature: response.signature,
-            jsApiList: api
+            jsApiList: config.apiList
           });
         }.bind(this));
       } else {
-        this.pushState(url, init, api);
+        this.pushState(request, settings);
       };
     }.bind(this));
   };
@@ -147,7 +151,7 @@ var JssdkHelper = function () {
   JssdkHelper.prototype.updateShare = function updateShare(data) {
     var state = this.state;
     var config = this.config;
-    var share = config.share;
+    var share = this.share;
 
     var title = state.title = data ? data.title || share.title : share.title;
     var desc = state.desc = data ? data.desc || share.desc : share.desc;
