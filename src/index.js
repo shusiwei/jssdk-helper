@@ -34,36 +34,38 @@ import jssdk from 'weixin-js-sdk';
 import 'whatwg-fetch';
 
 class JssdkHelper {
-  constructor(url, init, share, options = {}) {
-    const config = {};
+  constructor(request, settings = {}, config = {}, options = {}) {
+    const descElement = document.querySelector('meta[name="descripton"]');
 
-    config.share = {
-      title: share.title || document.title,
-      desc: share.desc || (document.querySelector('meta[name="descripton"]') ? document.querySelector('meta[name="descripton"]').content : document.title),
-      link: share.link || location.href,
-      callback: {
-        success: share.callback ? share.callback.success || function() {} : function() {},
-        cancel: share.callback ? share.callback.cancel || function() {} : function() {}
-      },
-      imgUrl: share.imgUrl
-    };
-    config.api = options.api || ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone', 'showOptionMenu', 'hideOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem'];
-    config.hideMenu = _.isBoolean(options.hideMenu) ? options.hideMenu : false;
-    config.showBase = _.isBoolean(options.showBase) ? options.showBase : false;
-    config.hideItem = options.hideItem || [];
-    config.showItem = options.showItem || ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
+    const title = config.title || document.title;
+    const desc = config.desc || (descElement ? ddescElement.content : document.title);
+    const link = config.link || location.href;
+    const callback = {
+      success: config.callback ? config.callback.success || function() {} : function() {},
+      cancel: config.callback ? config.callback.cancel || function() {} : function() {}
+    },
+    const imgUrl = config.imgUrl;
 
-    this.config = config;
+    const apiList = _.isArray(options.apiList) || ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone', 'showOptionMenu', 'hideOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem'];
+    const hideMenu = _.isBoolean(options.hideMenu) ? options.hideMenu : false;
+    const showBase = _.isBoolean(options.showBase) ? options.showBase : false;
+    const hideItem = _.isArray(options.hideItem) || [];
+    const showItem = _.isArray(options.showItem) || ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
+
+    this.share = {title, desc, link, callback, imgUrl};
+    this.config = {apiList, hideMenu, showBase, hideItemm, showItem};
     this.state = {};
 
-    this.initialize(url, init, config);
+    this.initialize(request, settings);
   }
-  initialize(url, init, config) {
-    this.pushState(url, init, config.api);
+  initialize(request, settings) {
+    this.pushState(request, settings);
     this.updateShare(config.share);
   }
-  pushState(url, init, api) {
-    fetch(url, init).then(response => {
+  pushState(request, settings) {
+    const {config} = {this.config};
+
+    fetch(request, settings).then(response => {
       if (response.ok) {
         response.json().then(data => {
           jssdk.config({
@@ -72,16 +74,16 @@ class JssdkHelper {
             timestamp: response.timestamp,
             nonceStr: response.nonceStr,
             signature: response.signature,
-            jsApiList: api
+            jsApiList: config.apiList
           });
         });
       } else {
-        this.pushState(url, init, api);
+        this.pushState(request, settings);
       };
     });
   }
   getState(...keys) {
-    const state = this.state;
+    const {state} = {this.state};
 
     if (keys.length === 0) {
       return state;
@@ -98,9 +100,7 @@ class JssdkHelper {
     }
   }
   updateShare(data) {
-    const state = this.state;
-    const config = this.config;
-    const share = config.share;
+    const {state, config, share} = {this.state, this.config, this.share};
 
     const title = state.title = data ? data.title || share.title : share.title;
     const desc = state.desc = data ? data.desc || share.desc : share.desc;
