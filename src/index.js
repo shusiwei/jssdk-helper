@@ -34,19 +34,12 @@ import jssdk from 'weixin-js-sdk';
 import 'whatwg-fetch';
 
 class JssdkHelper {
-  constructor(xhr, share, options = {}) {
-    const state = {};
+  constructor(url, init, share, options = {}) {
     const config = {};
 
-    config.xhr = {
-      url: xhr.url || '/',
-      type: xhr.type || 'POST',
-      data: xhr.data || {},
-      dataType: xhr.dataType || 'json'
-    };
     config.share = {
       title: share.title || document.title,
-      desc: share.desc || document.querySelector('meta[name="descripton"]').content,
+      desc: share.desc || (document.querySelector('meta[name="descripton"]') ? document.querySelector('meta[name="descripton"]').content : document.title),
       link: share.link || location.href,
       callback: {
         success: share.callback ? share.callback.success || function() {} : function() {},
@@ -61,24 +54,16 @@ class JssdkHelper {
     config.showItem = options.showItem || ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
 
     this.config = config;
-    this.state = state;
+    this.state = {};
 
-    this.initialize(config);
+    this.initialize(url, init, config);
   }
-  initialize(config) {
-    this.pushState(config.xhr, config.api);
+  initialize(url, init, config) {
+    this.pushState(url, init, config.api);
     this.updateShare(config.share);
   }
-  pushState(xhr, api) {
-    fetch(xhr.url, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      credentials: 'include',
-      body: JSON.stringify(xhr.data).replace(/":"/g, '=').replace(/","/g, '&').slice(2, -2)
-    }).then(response => {
+  pushState(url, init, api) {
+    fetch(url, init).then(response => {
       if (response.ok) {
         response.json().then(data => {
           jssdk.config({
@@ -91,26 +76,25 @@ class JssdkHelper {
           });
         });
       } else {
-        this.pushState(xhr, api);
+        this.pushState(url, init, api);
       };
     });
   }
-  getState(...states) {
-    console.log(...this.state);
+  getState(...keys) {
     const state = this.state;
 
-    if (states.length === 0) {
+    if (keys.length === 0) {
       return state;
-    } else if (states.length === 1) {
-      return state[states[0]];
+    } else if (keys.length === 1) {
+      return state[keys[0]];
     } else {
-      const tempState = {};
+      const result = {};
 
-      for (let i of states) {
-        tempState[i] = state[i];
+      for (let key of keys) {
+        result[key] = state[key];
       };
 
-      return tempState;
+      return result;
     }
   }
   updateShare(data) {
@@ -128,34 +112,10 @@ class JssdkHelper {
       const tempImg = new Image();
       const imgUrl = tempImg.src = imgSrc;
 
-      jssdk.onMenuShareAppMessage(_.assign({
-        title: title,
-        desc: desc,
-        link: link,
-        imgUrl: imgUrl,
-        type: 'link',
-        dataUrl: ''
-      }, this.getCallback(callback, 'message')));
-
-      jssdk.onMenuShareTimeline(_.assign({
-        title: title,
-        link: link,
-        imgUrl: imgUrl
-      }, this.getCallback(callback, 'timeline')));
-
-      jssdk.onMenuShareQQ(_.assign({
-        title: title,
-        desc: desc,
-        link: link,
-        imgUrl: imgUrl
-      }, this.getCallback(callback, 'qq')));
-
-      jssdk.onMenuShareQZone(_.assign({
-        title: title,
-        desc: desc,
-        link: link,
-        imgUrl: imgUrl
-      }, this.getCallback(callback, 'qzone')));
+      jssdk.onMenuShareAppMessage(_.assign({title, desc, link, imgUrl, type: 'link', dataUrl: ''}, this.getCallback(callback, 'message')));
+      jssdk.onMenuShareTimeline(_.assign({title, link, imgUrl}, this.getCallback(callback, 'timeline')));
+      jssdk.onMenuShareQQ(_.assign({title, desc, link, imgUrl}, this.getCallback(callback, 'qq')));
+      jssdk.onMenuShareQZone(_.assign({title, desc, link, imgUrl}, this.getCallback(callback, 'qzone')));
 
       if (config.hideMenu) {
         jssdk.showOptionMenu();

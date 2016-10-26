@@ -50,23 +50,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 var JssdkHelper = function () {
-  function JssdkHelper(xhr, share) {
-    var opts = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  function JssdkHelper(url, init, share) {
+    var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
     _classCallCheck(this, JssdkHelper);
 
-    var state = {};
     var config = {};
 
-    config.xhr = {
-      url: xhr.url || '/',
-      type: xhr.type || 'POST',
-      data: xhr.data || {},
-      dataType: xhr.dataType || 'json'
-    };
     config.share = {
       title: share.title || document.title,
-      desc: share.desc || document.querySelector('meta[name="descripton"]').content,
+      desc: share.desc || (document.querySelector('meta[name="descripton"]') ? document.querySelector('meta[name="descripton"]').content : document.title),
       link: share.link || location.href,
       callback: {
         success: share.callback ? share.callback.success || function () {} : function () {},
@@ -74,35 +67,27 @@ var JssdkHelper = function () {
       },
       imgUrl: share.imgUrl
     };
-    config.api = opts.api || ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone', 'showOptionMenu', 'hideOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem'];
-    config.hideMenu = _lodash2.default.isBoolean(opts.hideMenu) ? opts.hideMenu : false;
-    config.showBase = _lodash2.default.isBoolean(opts.showBase) ? opts.showBase : false;
-    config.hideItem = opts.hideItem || [];
-    config.showItem = opts.showItem || ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
+    config.api = options.api || ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone', 'showOptionMenu', 'hideOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem'];
+    config.hideMenu = _lodash2.default.isBoolean(options.hideMenu) ? options.hideMenu : false;
+    config.showBase = _lodash2.default.isBoolean(options.showBase) ? options.showBase : false;
+    config.hideItem = options.hideItem || [];
+    config.showItem = options.showItem || ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
 
     this.config = config;
-    this.state = state;
+    this.state = {};
 
-    this.initialize(config);
+    this.initialize(url, init, config);
   }
 
-  JssdkHelper.prototype.initialize = function initialize(config) {
-    this.pushState(config.xhr, config.api);
+  JssdkHelper.prototype.initialize = function initialize(url, init, config) {
+    this.pushState(url, init, config.api);
     this.updateShare(config.share);
   };
 
-  JssdkHelper.prototype.pushState = function pushState(xhr, api) {
+  JssdkHelper.prototype.pushState = function pushState(url, init, api) {
     var _this = this;
 
-    fetch(xhr.url, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      credentials: 'include',
-      body: JSON.stringify(xhr.data).replace(/":"/g, '=').replace(/","/g, '&').slice(2, -2)
-    }).then(function (response) {
+    fetch(url, init).then(function (response) {
       _newArrowCheck(this, _this);
 
       if (response.ok) {
@@ -119,29 +104,26 @@ var JssdkHelper = function () {
           });
         }.bind(this));
       } else {
-        this.pushState(xhr, api);
+        this.pushState(url, init, api);
       };
     }.bind(this));
   };
 
   JssdkHelper.prototype.getState = function getState() {
-    var _console;
-
-    (_console = console).log.apply(_console, this.state);
     var state = this.state;
 
-    for (var _len = arguments.length, states = Array(_len), _key = 0; _key < _len; _key++) {
-      states[_key] = arguments[_key];
+    for (var _len = arguments.length, keys = Array(_len), _key = 0; _key < _len; _key++) {
+      keys[_key] = arguments[_key];
     }
 
-    if (states.length === 0) {
+    if (keys.length === 0) {
       return state;
-    } else if (states.length === 1) {
-      return state[states[0]];
+    } else if (keys.length === 1) {
+      return state[keys[0]];
     } else {
-      var tempState = {};
+      var result = {};
 
-      for (var _iterator = states, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+      for (var _iterator = keys, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
         var _ref;
 
         if (_isArray) {
@@ -153,12 +135,12 @@ var JssdkHelper = function () {
           _ref = _i.value;
         }
 
-        var i = _ref;
+        var key = _ref;
 
-        tempState[i] = state[i];
+        result[key] = state[key];
       };
 
-      return tempState;
+      return result;
     }
   };
 
@@ -177,34 +159,10 @@ var JssdkHelper = function () {
       var tempImg = new Image();
       var imgUrl = tempImg.src = imgSrc;
 
-      _weixinJsSdk2.default.onMenuShareAppMessage(_lodash2.default.assign({
-        title: title,
-        desc: desc,
-        link: link,
-        imgUrl: imgUrl,
-        type: 'link',
-        dataUrl: ''
-      }, this.getCallback(callback, 'message')));
-
-      _weixinJsSdk2.default.onMenuShareTimeline(_lodash2.default.assign({
-        title: title,
-        link: link,
-        imgUrl: imgUrl
-      }, this.getCallback(callback, 'timeline')));
-
-      _weixinJsSdk2.default.onMenuShareQQ(_lodash2.default.assign({
-        title: title,
-        desc: desc,
-        link: link,
-        imgUrl: imgUrl
-      }, this.getCallback(callback, 'qq')));
-
-      _weixinJsSdk2.default.onMenuShareQZone(_lodash2.default.assign({
-        title: title,
-        desc: desc,
-        link: link,
-        imgUrl: imgUrl
-      }, this.getCallback(callback, 'qzone')));
+      _weixinJsSdk2.default.onMenuShareAppMessage(_lodash2.default.assign({ title: title, desc: desc, link: link, imgUrl: imgUrl, type: 'link', dataUrl: '' }, this.getCallback(callback, 'message')));
+      _weixinJsSdk2.default.onMenuShareTimeline(_lodash2.default.assign({ title: title, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'timeline')));
+      _weixinJsSdk2.default.onMenuShareQQ(_lodash2.default.assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'qq')));
+      _weixinJsSdk2.default.onMenuShareQZone(_lodash2.default.assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'qzone')));
 
       if (config.hideMenu) {
         _weixinJsSdk2.default.showOptionMenu();
