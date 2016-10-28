@@ -78,13 +78,9 @@ var JssdkHelper = function () {
     this.config = { apiList: apiList, hideMenu: hideMenu, showBase: showBase, hideItem: hideItem, showItem: showItem };
     this.state = {};
 
-    this.initialize(request, settings);
-  }
-
-  JssdkHelper.prototype.initialize = function initialize(request, settings) {
     this.pushState(request, settings);
     this.updateShare(this.share);
-  };
+  }
 
   JssdkHelper.prototype.pushState = function pushState(request, settings) {
     var _this = this;
@@ -149,6 +145,8 @@ var JssdkHelper = function () {
   };
 
   JssdkHelper.prototype.updateShare = function updateShare(data) {
+    var _this2 = this;
+
     var state = this.state;
     var config = this.config;
     var share = this.share;
@@ -160,6 +158,8 @@ var JssdkHelper = function () {
     var callback = data ? data.callback || share.callback : share.callback;
 
     _weixinJsSdk2.default.ready(function () {
+      _newArrowCheck(this, _this2);
+
       var tempImg = new Image();
       var imgUrl = tempImg.src = imgSrc;
 
@@ -191,7 +191,7 @@ var JssdkHelper = function () {
           menuList: config.showItem
         });
       };
-    });
+    }.bind(this));
   };
 
   JssdkHelper.prototype.getCallback = function getCallback(callback, type) {

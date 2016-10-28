@@ -56,9 +56,6 @@ class JssdkHelper {
     this.config = {apiList, hideMenu, showBase, hideItem, showItem};
     this.state = {};
 
-    this.initialize(request, settings);
-  }
-  initialize(request, settings) {
     this.pushState(request, settings);
     this.updateShare(this.share);
   }
@@ -110,7 +107,7 @@ class JssdkHelper {
     const imgSrc = data ? data.imgUrl || share.imgUrl : share.imgUrl;
     const callback = data ? data.callback || share.callback : share.callback;
 
-    jssdk.ready(function() {
+    jssdk.ready(() => {
       const tempImg = new Image();
       const imgUrl = tempImg.src = imgSrc;
 
