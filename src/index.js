@@ -30,11 +30,8 @@
  *       - (show : array) 显示的功能按钮
  * ================================================== */
 import _ from 'lodash';
+import jssdk from 'weixin-js-sdk';
 import 'whatwg-fetch';
-
-const jssdk = window.jWeixin;
-
-console.log(jssdk);
 
 class JssdkHelper {
   constructor(request, settings = {}, config = {}, options = {}) {
