@@ -96,10 +96,10 @@ var JssdkHelper = function () {
 
           jssdk.config({
             debug: false,
-            appId: response.appId,
-            timestamp: response.timestamp,
-            nonceStr: response.nonceStr,
-            signature: response.signature,
+            appId: data.appId,
+            timestamp: data.timestamp,
+            nonceStr: data.nonceStr,
+            signature: data.signature,
             jsApiList: config.apiList
           });
         }.bind(this));
