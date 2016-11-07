@@ -31,9 +31,7 @@
  * ================================================== */
 import _ from 'lodash';
 import 'whatwg-fetch';
-import jssdk from 'weixin-js-sdk';
-
-console.log(jssdk);
+const jssdk = window.jWeixin;
 
 class JssdkHelper {
   constructor(request, settings = {}, config = {}, options = {}) {
