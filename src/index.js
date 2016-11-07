@@ -31,7 +31,7 @@
  * ================================================== */
 import _ from 'lodash';
 import 'whatwg-fetch';
-const jssdk = window.jWeixin;
+import jssdk from 'weixin-js-sdk';
 
 class JssdkHelper {
   constructor(request, settings = {}, config = {}, options = {}) {
@@ -46,11 +46,11 @@ class JssdkHelper {
     };
     const imgUrl = config.imgUrl;
 
-    const apiList = _.isArray(options.apiList) || ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone', 'showOptionMenu', 'hideOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem'];
+    const apiList = _.isArray(options.apiList) ? options.apiList : ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone', 'showOptionMenu', 'hideOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem'];
     const hideMenu = _.isBoolean(options.hideMenu) ? options.hideMenu : false;
     const showBase = _.isBoolean(options.showBase) ? options.showBase : false;
-    const hideItem = _.isArray(options.hideItem) || [];
-    const showItem = _.isArray(options.showItem) || ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
+    const hideItem = _.isArray(options.hideItem) ? options.hideItem : [];
+    const showItem = _.isArray(options.showItem) ? options.showItem : ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
 
     this.share = {title, desc, link, callback, imgUrl};
     this.config = {apiList, hideMenu, showBase, hideItem, showItem};
