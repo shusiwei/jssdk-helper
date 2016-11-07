@@ -33,6 +33,8 @@ import _ from 'lodash';
 import 'whatwg-fetch';
 import jssdk from 'weixin-js-sdk';
 
+console.log(jssdk);
+
 class JssdkHelper {
   constructor(request, settings = {}, config = {}, options = {}) {
     const descElement = document.querySelector('meta[name="descripton"]');
