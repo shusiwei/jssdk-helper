@@ -6,10 +6,6 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _weixinJsSdk = require('weixin-js-sdk');
-
-var _weixinJsSdk2 = _interopRequireDefault(_weixinJsSdk);
-
 require('whatwg-fetch');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -48,6 +44,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                                                                                                                                                            *       - (show : array) 显示的功能按钮
                                                                                                                                                            * ================================================== */
 
+
+var jssdk = window.jWeixin;
 
 var JssdkHelper = function () {
   function JssdkHelper(request) {
@@ -94,7 +92,7 @@ var JssdkHelper = function () {
         response.json().then(function (data) {
           _newArrowCheck(this, _this);
 
-          _weixinJsSdk2.default.config({
+          jssdk.config({
             debug: false,
             appId: data.appId,
             timestamp: data.timestamp,
@@ -157,37 +155,37 @@ var JssdkHelper = function () {
     var imgSrc = data ? data.imgUrl || share.imgUrl : share.imgUrl;
     var callback = data ? data.callback || share.callback : share.callback;
 
-    _weixinJsSdk2.default.ready(function () {
+    jssdk.ready(function () {
       _newArrowCheck(this, _this2);
 
       var tempImg = new Image();
       var imgUrl = tempImg.src = imgSrc;
 
-      _weixinJsSdk2.default.onMenuShareAppMessage(_lodash2.default.assign({ title: title, desc: desc, link: link, imgUrl: imgUrl, type: 'link', dataUrl: '' }, this.getCallback(callback, 'message')));
-      _weixinJsSdk2.default.onMenuShareTimeline(_lodash2.default.assign({ title: title, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'timeline')));
-      _weixinJsSdk2.default.onMenuShareQQ(_lodash2.default.assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'qq')));
-      _weixinJsSdk2.default.onMenuShareQZone(_lodash2.default.assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'qzone')));
+      jssdk.onMenuShareAppMessage(_lodash2.default.assign({ title: title, desc: desc, link: link, imgUrl: imgUrl, type: 'link', dataUrl: '' }, this.getCallback(callback, 'message')));
+      jssdk.onMenuShareTimeline(_lodash2.default.assign({ title: title, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'timeline')));
+      jssdk.onMenuShareQQ(_lodash2.default.assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'qq')));
+      jssdk.onMenuShareQZone(_lodash2.default.assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'qzone')));
 
       if (config.hideMenu) {
-        _weixinJsSdk2.default.showOptionMenu();
+        jssdk.showOptionMenu();
       } else {
-        _weixinJsSdk2.default.hideOptionMenu();
+        jssdk.hideOptionMenu();
       };
 
       if (config.showBase) {
-        _weixinJsSdk2.default.showAllNonBaseMenuItem();
+        jssdk.showAllNonBaseMenuItem();
       } else {
-        _weixinJsSdk2.default.hideAllNonBaseMenuItem();
+        jssdk.hideAllNonBaseMenuItem();
       };
 
       if (config.hideItem.length > 0) {
-        _weixinJsSdk2.default.hideMenuItems({
+        jssdk.hideMenuItems({
           menuList: config.hideItem
         });
       };
 
       if (config.showItem.length > 0) {
-        _weixinJsSdk2.default.showMenuItems({
+        jssdk.showMenuItems({
           menuList: config.showItem
         });
       };
