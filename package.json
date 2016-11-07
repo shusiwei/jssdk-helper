@@ -15,7 +15,6 @@
   "homepage": "https://github.com/shusiwei/jssdk-helper#readme",
   "dependencies": {
     "lodash": "^4.16.4",
-    "weixin-js-sdk": "^1.0.7",
     "whatwg-fetch": "^1.0.0"
   },
   "devDependencies": {
