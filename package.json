@@ -16,7 +16,7 @@
   "dependencies": {
     "lodash": "^4.16.4",
     "weixin-js-sdk": "^1.0.7",
-    "whatwg-fetch": "^1.0.0"
+    "whatwg-fetch": "github:shusiwei/fetch"
   },
   "devDependencies": {
     "babel-core": "^6.13.2",
