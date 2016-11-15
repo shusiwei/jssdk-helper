@@ -1,7 +1,11 @@
 {
   "presets": [
-    ["es2015", {"loose": true, "spec": true}],
-    ["es2016"]
-  ],
-  "plugins": []
+    ["latest", {
+      "es2015": {
+        "loose": true,
+        "spec": true,
+        "modules": false
+      }
+    }]
+  ]
 }
