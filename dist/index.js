@@ -33,7 +33,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *       - (hide : array) 隐藏的功能按钮
  *       - (show : array) 显示的功能按钮
  * ================================================== */
-import _ from 'wizard';
+import _ from 'tiny';
 import 'whatwg-fetch';
 import jssdk from 'weixin-js-sdk';
 

@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/shusiwei/jssdk-helper#readme",
   "dependencies": {
-    "wizard": "github:shusiwei/wizard",
+    "tiny": "github:shusiwei/tiny",
     "weixin-js-sdk": "^1.0.7",
     "whatwg-fetch": "github:shusiwei/fetch"
   },
