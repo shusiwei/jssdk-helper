@@ -30,11 +30,11 @@
  *       - (show : array) 显示的功能按钮
  * ================================================== */
 import _ from 'tiny';
-import 'whatwg-fetch';
+import axios from 'axios';
 import jssdk from 'weixin-js-sdk';
 
 class JssdkHelper {
-  constructor(request, settings = {}, config = {}, options = {}) {
+  constructor(request, setting = {}, config = {}, options = {}) {
     const descElement = document.querySelector('meta[name="descripton"]');
 
     const title = config.title || document.title;
@@ -56,26 +56,24 @@ class JssdkHelper {
     this.config = {apiList, hideMenu, showBase, hideItem, showItem};
     this.state = {};
 
-    this.pushState(request, settings);
+    this.pushState(request, setting);
     this.updateShare(this.share);
   }
-  pushState(request, settings) {
+  pushState(request, setting) {
     const config = this.config;
 
-    fetch(request, settings).then(response => {
-      if (response.ok) {
-        response.json().then(data => {
-          jssdk.config({
-            debug: false,
-            appId: data.appId,
-            timestamp: data.timestamp,
-            nonceStr: data.nonceStr,
-            signature: data.signature,
-            jsApiList: config.apiList
-          });
+    axios.post(request, setting).then(response => {
+      if (response.statusText === 'OK') {
+        jssdk.config({
+          debug: false,
+          appId: response.data.appId,
+          timestamp: response.data.timestamp,
+          nonceStr: response.data.nonceStr,
+          signature: response.data.signature,
+          jsApiList: config.apiList
         });
       } else {
-        this.pushState(request, settings);
+        this.pushState(request, setting);
       };
     });
   }

@@ -34,12 +34,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *       - (show : array) 显示的功能按钮
  * ================================================== */
 import _ from 'tiny';
-import 'whatwg-fetch';
+import axios from 'axios';
 import jssdk from 'weixin-js-sdk';
 
 var JssdkHelper = function () {
   function JssdkHelper(request) {
-    var settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var setting = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var config = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
     var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
@@ -66,33 +66,29 @@ var JssdkHelper = function () {
     this.config = { apiList: apiList, hideMenu: hideMenu, showBase: showBase, hideItem: hideItem, showItem: showItem };
     this.state = {};
 
-    this.pushState(request, settings);
+    this.pushState(request, setting);
     this.updateShare(this.share);
   }
 
-  JssdkHelper.prototype.pushState = function pushState(request, settings) {
+  JssdkHelper.prototype.pushState = function pushState(request, setting) {
     var _this = this;
 
     var config = this.config;
 
-    fetch(request, settings).then(function (response) {
+    axios.post(request, setting).then(function (response) {
       _newArrowCheck(this, _this);
 
-      if (response.ok) {
-        response.json().then(function (data) {
-          _newArrowCheck(this, _this);
-
-          jssdk.config({
-            debug: false,
-            appId: data.appId,
-            timestamp: data.timestamp,
-            nonceStr: data.nonceStr,
-            signature: data.signature,
-            jsApiList: config.apiList
-          });
-        }.bind(this));
+      if (response.statusText === 'OK') {
+        jssdk.config({
+          debug: false,
+          appId: response.data.appId,
+          timestamp: response.data.timestamp,
+          nonceStr: response.data.nonceStr,
+          signature: response.data.signature,
+          jsApiList: config.apiList
+        });
       } else {
-        this.pushState(request, settings);
+        this.pushState(request, setting);
       };
     }.bind(this));
   };
