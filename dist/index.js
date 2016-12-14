@@ -33,7 +33,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *       - (hide : array) 隐藏的功能按钮
  *       - (show : array) 显示的功能按钮
  * ================================================== */
-import _ from 'tiny';
+import { isArray, isBoolean, assign, isPlainObject } from 'tiny';
 import axios from 'axios';
 import jssdk from 'weixin-js-sdk';
 
@@ -56,11 +56,11 @@ var JssdkHelper = function () {
     };
     var imgUrl = config.imgUrl;
 
-    var apiList = _.isArray(options.apiList) ? options.apiList : ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone', 'showOptionMenu', 'hideOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem'];
-    var hideMenu = _.isBoolean(options.hideMenu) ? options.hideMenu : false;
-    var showBase = _.isBoolean(options.showBase) ? options.showBase : false;
-    var hideItem = _.isArray(options.hideItem) ? options.hideItem : [];
-    var showItem = _.isArray(options.showItem) ? options.showItem : ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
+    var apiList = isArray(options.apiList) ? options.apiList : ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareQZone', 'showOptionMenu', 'hideOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem'];
+    var hideMenu = isBoolean(options.hideMenu) ? options.hideMenu : false;
+    var showBase = isBoolean(options.showBase) ? options.showBase : false;
+    var hideItem = isArray(options.hideItem) ? options.hideItem : [];
+    var showItem = isArray(options.showItem) ? options.showItem : ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
 
     this.share = { title: title, desc: desc, link: link, callback: callback, imgUrl: imgUrl };
     this.config = { apiList: apiList, hideMenu: hideMenu, showBase: showBase, hideItem: hideItem, showItem: showItem };
@@ -147,10 +147,10 @@ var JssdkHelper = function () {
       var tempImg = new Image();
       var imgUrl = tempImg.src = imgSrc;
 
-      jssdk.onMenuShareAppMessage(_.assign({ title: title, desc: desc, link: link, imgUrl: imgUrl, type: 'link', dataUrl: '' }, this.getCallback(callback, 'message')));
-      jssdk.onMenuShareTimeline(_.assign({ title: title, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'timeline')));
-      jssdk.onMenuShareQQ(_.assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'qq')));
-      jssdk.onMenuShareQZone(_.assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'qzone')));
+      jssdk.onMenuShareAppMessage(assign({ title: title, desc: desc, link: link, imgUrl: imgUrl, type: 'link', dataUrl: '' }, this.getCallback(callback, 'message')));
+      jssdk.onMenuShareTimeline(assign({ title: title, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'timeline')));
+      jssdk.onMenuShareQQ(assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'qq')));
+      jssdk.onMenuShareQZone(assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'qzone')));
 
       if (config.hideMenu) {
         jssdk.showOptionMenu();
@@ -180,8 +180,8 @@ var JssdkHelper = function () {
 
   JssdkHelper.prototype.getCallback = function getCallback(callback, type) {
     return {
-      success: _.isPlainObject(callback[type]) && 'success' in callback[type] ? callback[type].success : callback.success || this.config.share.callback.success,
-      cancel: _.isPlainObject(callback[type]) && 'cancel' in callback[type] ? callback[type].cancel : callback.cancel || this.config.share.callback.cancel
+      success: isPlainObject(callback[type]) && 'success' in callback[type] ? callback[type].success : callback.success || this.config.share.callback.success,
+      cancel: isPlainObject(callback[type]) && 'cancel' in callback[type] ? callback[type].cancel : callback.cancel || this.config.share.callback.cancel
     };
   };
 
