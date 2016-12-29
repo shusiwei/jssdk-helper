@@ -78,7 +78,7 @@ var JssdkHelper = function () {
     axios.post(request, setting).then(function (response) {
       _newArrowCheck(this, _this);
 
-      if (response.statusText === 'OK') {
+      if (response.status >= 200 && response.status < 300) {
         jssdk.config({
           debug: false,
           appId: response.data.appId,
@@ -87,8 +87,15 @@ var JssdkHelper = function () {
           signature: response.data.signature,
           jsApiList: config.apiList
         });
+
+        jssdk.error(function (res) {
+          _newArrowCheck(this, _this);
+
+          console.error(res);
+          this.pushState(request, setting);
+        }.bind(this));
       } else {
-        this.pushState(request, setting);
+        throw new Error(response.statusText);
       };
     }.bind(this));
   };

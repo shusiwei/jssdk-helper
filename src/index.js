@@ -63,7 +63,7 @@ class JssdkHelper {
     const config = this.config;
 
     axios.post(request, setting).then(response => {
-      if (response.statusText === 'OK') {
+      if (response.status >= 200 && response.status < 300) {
         jssdk.config({
           debug: false,
           appId: response.data.appId,
@@ -72,8 +72,13 @@ class JssdkHelper {
           signature: response.data.signature,
           jsApiList: config.apiList
         });
+
+        jssdk.error(res => {
+          console.error(res);
+          this.pushState(request, setting);
+        });
       } else {
-        this.pushState(request, setting);
+        throw new Error(response.statusText);
       };
     });
   }
