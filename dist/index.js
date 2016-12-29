@@ -92,7 +92,11 @@ var JssdkHelper = function () {
           _newArrowCheck(this, _this);
 
           console.error(res);
-          this.pushState(request, setting);
+          window.setTimeout(function () {
+            _newArrowCheck(this, _this);
+
+            this.pushState(request, setting);
+          }.bind(this), 6 * 1000);
         }.bind(this));
       } else {
         throw new Error(response.statusText);

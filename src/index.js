@@ -75,7 +75,9 @@ class JssdkHelper {
 
         jssdk.error(res => {
           console.error(res);
-          this.pushState(request, setting);
+          window.setTimeout(() => {
+            this.pushState(request, setting);
+          }, 6 * 1000);
         });
       } else {
         throw new Error(response.statusText);
