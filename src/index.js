@@ -74,7 +74,7 @@ class JssdkHelper {
         });
 
         jssdk.error(res => {
-          console.error(res);
+          console.error(error);
           this.pushState(request, setting);
         });
       } else {
