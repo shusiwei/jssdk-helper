@@ -139,18 +139,20 @@ var JssdkHelper = function () {
     }
   };
 
-  JssdkHelper.prototype.updateShare = function updateShare(data) {
+  JssdkHelper.prototype.updateShare = function updateShare() {
     var _this2 = this;
+
+    var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
     var state = this.state;
     var config = this.config;
     var share = this.share;
 
-    var title = state.title = data ? data.title || share.title : share.title;
-    var desc = state.desc = data ? data.desc || share.desc : share.desc;
-    var link = state.link = data ? data.link || share.link : share.link;
-    var imgSrc = data ? data.imgUrl || share.imgUrl : share.imgUrl;
-    var callback = data ? data.callback || share.callback : share.callback;
+    var title = state.title = data.title || share.title;
+    var desc = state.desc = data.desc || share.desc;
+    var link = state.link = data.link || share.link;
+    var imgSrc = data.imgUrl || share.imgUrl;
+    var callback = data.callback || share.callback;
 
     jssdk.ready(function () {
       _newArrowCheck(this, _this2);

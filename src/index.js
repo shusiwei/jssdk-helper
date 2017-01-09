@@ -101,16 +101,16 @@ class JssdkHelper {
       return result;
     }
   }
-  updateShare(data) {
+  updateShare(data = {}) {
     const state = this.state;
     const config = this.config;
     const share = this.share;
 
-    const title = state.title = data ? data.title || share.title : share.title;
-    const desc = state.desc = data ? data.desc || share.desc : share.desc;
-    const link = state.link = data ? data.link || share.link : share.link;
-    const imgSrc = data ? data.imgUrl || share.imgUrl : share.imgUrl;
-    const callback = data ? data.callback || share.callback : share.callback;
+    const title = state.title = data.title || share.title;
+    const desc = state.desc = data.desc || share.desc;
+    const link = state.link = data.link || share.link;
+    const imgSrc = data.imgUrl || share.imgUrl;
+    const callback = data.callback || share.callback;
 
     jssdk.ready(() => {
       const tempImg = new Image();
