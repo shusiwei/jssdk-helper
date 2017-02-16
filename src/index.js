@@ -29,7 +29,7 @@
  *       - (hide : array) 隐藏的功能按钮
  *       - (show : array) 显示的功能按钮
  * ================================================== */
-import {isArray, isBoolean, assign, isPlainObject} from 'tiny';
+import {isArray, isBoolean, assign, isPlainObject, isFunction} from 'tiny';
 import axios from 'axios';
 import jssdk from 'weixin-js-sdk';
 
@@ -41,8 +41,8 @@ class JssdkHelper {
     const desc = config.desc || (descElement ? descElement.content : document.title);
     const link = config.link || location.href;
     const callback = {
-      success: config.callback && config.callback.success ? config.callback.success : function() {},
-      cancel: config.callback && config.callback.cancel ? config.callback.cancel : function() {}
+      success: isPlainObject(config.callback) && isFunction(config.callback.success) ? config.callback.success : function() {},
+      cancel: isPlainObject(config.callback) && isFunction(config.callback.cancel) ? config.callback.cancel : function() {}
     };
     const imgUrl = config.imgUrl;
 
