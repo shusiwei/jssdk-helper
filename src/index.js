@@ -33,8 +33,10 @@ import {isArray, isBoolean, assign, isPlainObject} from 'tiny';
 import axios from 'axios';
 import jssdk from 'weixin-js-sdk';
 
-class JssdkHelper {
+class JssdkHelper extends jssdk {
   constructor(request, setting = {}, config = {}, options = {}) {
+    super();
+
     const descElement = document.querySelector('meta[name="descripton"]');
 
     const title = config.title || document.title;
