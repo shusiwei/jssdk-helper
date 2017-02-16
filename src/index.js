@@ -41,8 +41,8 @@ class JssdkHelper {
     const desc = config.desc || (descElement ? descElement.content : document.title);
     const link = config.link || location.href;
     const callback = {
-      success: config.callback ? config.callback.success || function() {} : function() {},
-      cancel: config.callback ? config.callback.cancel || function() {} : function() {}
+      success: config.callback && config.callback.success ? config.callback.success : function() {},
+      cancel: config.callback && config.callback.cancel ? config.callback.cancel : function() {}
     };
     const imgUrl = config.imgUrl;
 

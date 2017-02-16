@@ -51,8 +51,8 @@ var JssdkHelper = function () {
     var desc = config.desc || (descElement ? descElement.content : document.title);
     var link = config.link || location.href;
     var callback = {
-      success: config.callback ? config.callback.success || function () {} : function () {},
-      cancel: config.callback ? config.callback.cancel || function () {} : function () {}
+      success: config.callback && config.callback.success ? config.callback.success : function () {},
+      cancel: config.callback && config.callback.cancel ? config.callback.cancel : function () {}
     };
     var imgUrl = config.imgUrl;
 
