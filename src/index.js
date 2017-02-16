@@ -33,10 +33,8 @@ import {isArray, isBoolean, assign, isPlainObject} from 'tiny';
 import axios from 'axios';
 import jssdk from 'weixin-js-sdk';
 
-class JssdkHelper extends jssdk {
+class JssdkHelper {
   constructor(request, setting = {}, config = {}, options = {}) {
-    super();
-
     const descElement = document.querySelector('meta[name="descripton"]');
 
     const title = config.title || document.title;
@@ -54,6 +52,7 @@ class JssdkHelper extends jssdk {
     const hideItem = isArray(options.hideItem) ? options.hideItem : [];
     const showItem = isArray(options.showItem) ? options.showItem : ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
 
+    this.jssdk = jssdk;
     this.share = {title, desc, link, callback, imgUrl};
     this.config = {apiList, hideMenu, showBase, hideItem, showItem};
     this.state = {};

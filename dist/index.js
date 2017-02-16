@@ -2,10 +2,6 @@ function _newArrowCheck(innerThis, boundThis) { if (innerThis !== boundThis) { t
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 /* ==================================================
  * @ 微信公众平台开发者文档
  * @ url : http://mp.weixin.qq.com/wiki/11/74ad127cc054f6b80759c40f77ec03db.html
@@ -41,17 +37,13 @@ import { isArray, isBoolean, assign, isPlainObject } from 'tiny';
 import axios from 'axios';
 import jssdk from 'weixin-js-sdk';
 
-var JssdkHelper = function (_jssdk) {
-  _inherits(JssdkHelper, _jssdk);
-
+var JssdkHelper = function () {
   function JssdkHelper(request) {
     var setting = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var config = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
     var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
     _classCallCheck(this, JssdkHelper);
-
-    var _this = _possibleConstructorReturn(this, _jssdk.call(this));
 
     var descElement = document.querySelector('meta[name="descripton"]');
 
@@ -70,22 +62,22 @@ var JssdkHelper = function (_jssdk) {
     var hideItem = isArray(options.hideItem) ? options.hideItem : [];
     var showItem = isArray(options.showItem) ? options.showItem : ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
 
-    _this.share = { title: title, desc: desc, link: link, callback: callback, imgUrl: imgUrl };
-    _this.config = { apiList: apiList, hideMenu: hideMenu, showBase: showBase, hideItem: hideItem, showItem: showItem };
-    _this.state = {};
+    this.jssdk = jssdk;
+    this.share = { title: title, desc: desc, link: link, callback: callback, imgUrl: imgUrl };
+    this.config = { apiList: apiList, hideMenu: hideMenu, showBase: showBase, hideItem: hideItem, showItem: showItem };
+    this.state = {};
 
-    _this.pushState(request, setting);
-    _this.updateShare(_this.share);
-    return _this;
+    this.pushState(request, setting);
+    this.updateShare(this.share);
   }
 
   JssdkHelper.prototype.pushState = function pushState(request, setting) {
-    var _this2 = this;
+    var _this = this;
 
     var config = this.config;
 
     axios.post(request, setting).then(function (response) {
-      _newArrowCheck(this, _this2);
+      _newArrowCheck(this, _this);
 
       if (response.status >= 200 && response.status < 300) {
         jssdk.config({
@@ -98,11 +90,11 @@ var JssdkHelper = function (_jssdk) {
         });
 
         jssdk.error(function (res) {
-          _newArrowCheck(this, _this2);
+          _newArrowCheck(this, _this);
 
           console.error(res.errMsg);
           window.setTimeout(function () {
-            _newArrowCheck(this, _this2);
+            _newArrowCheck(this, _this);
 
             this.pushState(request, setting);
           }.bind(this), 12 * 1000);
@@ -149,7 +141,7 @@ var JssdkHelper = function (_jssdk) {
   };
 
   JssdkHelper.prototype.updateShare = function updateShare() {
-    var _this3 = this;
+    var _this2 = this;
 
     var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -164,7 +156,7 @@ var JssdkHelper = function (_jssdk) {
     var callback = data.callback || share.callback;
 
     jssdk.ready(function () {
-      _newArrowCheck(this, _this3);
+      _newArrowCheck(this, _this2);
 
       var tempImg = new Image();
       var imgUrl = tempImg.src = imgSrc;
@@ -208,7 +200,7 @@ var JssdkHelper = function (_jssdk) {
   };
 
   return JssdkHelper;
-}(jssdk);
+}();
 
 ;
 
