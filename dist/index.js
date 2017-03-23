@@ -159,7 +159,9 @@ var JssdkHelper = function () {
       _newArrowCheck(this, _this2);
 
       var tempImg = new Image();
-      var imgUrl = tempImg.src = imgSrc;
+      tempImg.src = imgSrc;
+
+      var imgUrl = tempImg.src;
 
       jssdk.onMenuShareAppMessage(assign({ title: title, desc: desc, link: link, imgUrl: imgUrl, type: 'link', dataUrl: '' }, this.getCallback(callback, 'message')));
       jssdk.onMenuShareTimeline(assign({ title: title, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'timeline')));

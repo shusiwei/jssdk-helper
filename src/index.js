@@ -115,7 +115,9 @@ class JssdkHelper {
 
     jssdk.ready(() => {
       const tempImg = new Image();
-      const imgUrl = tempImg.src = imgSrc;
+      tempImg.src = imgSrc;
+
+      const imgUrl = tempImg.src;
 
       jssdk.onMenuShareAppMessage(assign({title, desc, link, imgUrl, type: 'link', dataUrl: ''}, this.getCallback(callback, 'message')));
       jssdk.onMenuShareTimeline(assign({title, link, imgUrl}, this.getCallback(callback, 'timeline')));
