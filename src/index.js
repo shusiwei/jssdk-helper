@@ -34,7 +34,7 @@ import axios from 'axios';
 import jssdk from 'weixin-js-sdk';
 
 class JssdkHelper {
-  constructor(request, setting = {}, config = {}, options = {}) {
+  constructor(fetch, config = {}, options = {}) {
     const descElement = document.querySelector('meta[name="descripton"]');
 
     const title = config.title || document.title;
@@ -57,27 +57,29 @@ class JssdkHelper {
     this.config = {apiList, hideMenu, showBase, hideItem, showItem};
     this.state = {};
 
-    this.pushState(request, setting);
+    this.pushState(fetch);
     this.updateShare(this.share);
   }
-  pushState(request, setting) {
+  pushState(fetch) {
     const config = this.config;
 
-    axios.post(request, setting).then(response => {
+    fetch().then(response => {
       if (response.status >= 200 && response.status < 300) {
+        const {appId, timestamp, nonceStr, signature} = response.data;
+
         jssdk.config({
           debug: false,
-          appId: response.data.appId,
-          timestamp: response.data.timestamp,
-          nonceStr: response.data.nonceStr,
-          signature: response.data.signature,
+          appId,
+          timestamp,
+          nonceStr,
+          signature,
           jsApiList: config.apiList
         });
 
         jssdk.error(res => {
           console.error(res.errMsg);
           window.setTimeout(() => {
-            this.pushState(request, setting);
+            this.pushState(fetch);
           }, 12 * 1000);
         });
       } else {

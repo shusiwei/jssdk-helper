@@ -38,10 +38,9 @@ import axios from 'axios';
 import jssdk from 'weixin-js-sdk';
 
 var JssdkHelper = function () {
-  function JssdkHelper(request) {
-    var setting = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var config = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+  function JssdkHelper(fetch) {
+    var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
     _classCallCheck(this, JssdkHelper);
 
@@ -67,25 +66,32 @@ var JssdkHelper = function () {
     this.config = { apiList: apiList, hideMenu: hideMenu, showBase: showBase, hideItem: hideItem, showItem: showItem };
     this.state = {};
 
-    this.pushState(request, setting);
+    this.pushState(fetch);
     this.updateShare(this.share);
   }
 
-  JssdkHelper.prototype.pushState = function pushState(request, setting) {
+  JssdkHelper.prototype.pushState = function pushState(fetch) {
     var _this = this;
 
     var config = this.config;
 
-    axios.post(request, setting).then(function (response) {
+    fetch().then(function (response) {
       _newArrowCheck(this, _this);
 
       if (response.status >= 200 && response.status < 300) {
+        var _response$data = response.data,
+            appId = _response$data.appId,
+            timestamp = _response$data.timestamp,
+            nonceStr = _response$data.nonceStr,
+            signature = _response$data.signature;
+
+
         jssdk.config({
           debug: false,
-          appId: response.data.appId,
-          timestamp: response.data.timestamp,
-          nonceStr: response.data.nonceStr,
-          signature: response.data.signature,
+          appId: appId,
+          timestamp: timestamp,
+          nonceStr: nonceStr,
+          signature: signature,
           jsApiList: config.apiList
         });
 
@@ -96,7 +102,7 @@ var JssdkHelper = function () {
           window.setTimeout(function () {
             _newArrowCheck(this, _this);
 
-            this.pushState(request, setting);
+            this.pushState(fetch);
           }.bind(this), 12 * 1000);
         }.bind(this));
       } else {
