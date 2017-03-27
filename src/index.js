@@ -30,11 +30,10 @@
  *       - (show : array) 显示的功能按钮
  * ================================================== */
 import {isArray, isBoolean, assign, isPlainObject, isFunction} from 'tiny';
-import axios from 'axios';
 import jssdk from 'weixin-js-sdk';
 
 class JssdkHelper {
-  constructor(fetch, config = {}, options = {}) {
+  constructor(request, config = {}, options = {}) {
     const descElement = document.querySelector('meta[name="descripton"]');
 
     const title = config.title || document.title;
@@ -57,13 +56,13 @@ class JssdkHelper {
     this.config = {apiList, hideMenu, showBase, hideItem, showItem};
     this.state = {};
 
-    this.pushState(fetch);
+    this.pushState(request);
     this.updateShare(this.share);
   }
-  pushState(fetch) {
+  pushState(request) {
     const config = this.config;
 
-    fetch().then(response => {
+    request().then(response => {
       if (response.status >= 200 && response.status < 300) {
         const {appId, timestamp, nonceStr, signature} = response.data;
 
@@ -79,7 +78,7 @@ class JssdkHelper {
         jssdk.error(res => {
           console.error(res.errMsg);
           window.setTimeout(() => {
-            this.pushState(fetch);
+            this.pushState(request);
           }, 12 * 1000);
         });
       } else {

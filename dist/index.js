@@ -34,11 +34,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *       - (show : array) 显示的功能按钮
  * ================================================== */
 import { isArray, isBoolean, assign, isPlainObject, isFunction } from 'tiny';
-import axios from 'axios';
 import jssdk from 'weixin-js-sdk';
 
 var JssdkHelper = function () {
-  function JssdkHelper(fetch) {
+  function JssdkHelper(request) {
     var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
@@ -66,16 +65,16 @@ var JssdkHelper = function () {
     this.config = { apiList: apiList, hideMenu: hideMenu, showBase: showBase, hideItem: hideItem, showItem: showItem };
     this.state = {};
 
-    this.pushState(fetch);
+    this.pushState(request);
     this.updateShare(this.share);
   }
 
-  JssdkHelper.prototype.pushState = function pushState(fetch) {
+  JssdkHelper.prototype.pushState = function pushState(request) {
     var _this = this;
 
     var config = this.config;
 
-    fetch().then(function (response) {
+    request().then(function (response) {
       _newArrowCheck(this, _this);
 
       if (response.status >= 200 && response.status < 300) {
@@ -102,7 +101,7 @@ var JssdkHelper = function () {
           window.setTimeout(function () {
             _newArrowCheck(this, _this);
 
-            this.pushState(fetch);
+            this.pushState(request);
           }.bind(this), 12 * 1000);
         }.bind(this));
       } else {
