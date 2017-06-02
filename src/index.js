@@ -104,15 +104,17 @@ class JssdkHelper {
     }
   }
   updateShare(data = {}) {
-    const state = this.state;
-    const config = this.config;
-    const share = this.share;
+    const {state, config, share} = this;
 
-    const title = state.title = data.title || share.title;
-    const desc = state.desc = data.desc || share.desc;
-    const link = state.link = data.link || share.link;
-    const imgSrc = data.imgUrl || share.imgUrl;
-    const callback = data.callback || share.callback;
+    const title = data.hasOwnProperty('title') ? data.title : share.title;
+    const desc = data.hasOwnProperty('desc') ? data.desc : share.desc;
+    const link = data.hasOwnProperty('link') ? data.link : share.link;
+    const imgSrc = data.hasOwnProperty('imgUrl') ? data.imgUrl : share.imgUrl;
+    const callback = data.hasOwnProperty('callback') || share.callback;
+
+    state.title = title;
+    state.desc = desc;
+    state.link = link;
 
     jssdk.ready(() => {
       const tempImg = new Image();

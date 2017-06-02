@@ -149,16 +149,20 @@ var JssdkHelper = function () {
     var _this2 = this;
 
     var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var state = this.state,
+        config = this.config,
+        share = this.share;
 
-    var state = this.state;
-    var config = this.config;
-    var share = this.share;
 
-    var title = state.title = data.title || share.title;
-    var desc = state.desc = data.desc || share.desc;
-    var link = state.link = data.link || share.link;
-    var imgSrc = data.imgUrl || share.imgUrl;
-    var callback = data.callback || share.callback;
+    var title = data.hasOwnProperty('title') ? data.title : share.title;
+    var desc = data.hasOwnProperty('desc') ? data.desc : share.desc;
+    var link = data.hasOwnProperty('link') ? data.link : share.link;
+    var imgSrc = data.hasOwnProperty('imgUrl') ? data.imgUrl : share.imgUrl;
+    var callback = data.hasOwnProperty('callback') || share.callback;
+
+    state.title = title;
+    state.desc = desc;
+    state.link = link;
 
     jssdk.ready(function () {
       _newArrowCheck(this, _this2);

@@ -1,6 +1,6 @@
 {
   "name": "jssdk-helper",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A weixin jssdk helper",
   "main": "dist/index.js",
   "scripts": {
