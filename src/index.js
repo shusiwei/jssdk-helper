@@ -110,7 +110,7 @@ class JssdkHelper {
     const desc = data.hasOwnProperty('desc') ? data.desc : share.desc;
     const link = data.hasOwnProperty('link') ? data.link : share.link;
     const imgSrc = data.hasOwnProperty('imgUrl') ? data.imgUrl : share.imgUrl;
-    const callback = data.hasOwnProperty('callback') || share.callback;
+    const callback = data.hasOwnProperty('callback') ? data.callback : share.callback;
 
     state.title = title;
     state.desc = desc;

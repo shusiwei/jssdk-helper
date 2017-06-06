@@ -158,7 +158,7 @@ var JssdkHelper = function () {
     var desc = data.hasOwnProperty('desc') ? data.desc : share.desc;
     var link = data.hasOwnProperty('link') ? data.link : share.link;
     var imgSrc = data.hasOwnProperty('imgUrl') ? data.imgUrl : share.imgUrl;
-    var callback = data.hasOwnProperty('callback') || share.callback;
+    var callback = data.hasOwnProperty('callback') ? data.callback : share.callback;
 
     state.title = title;
     state.desc = desc;
