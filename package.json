@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/shusiwei/jssdk-helper#readme",
   "dependencies": {
-    "axios": "^0.15.2",
     "tiny": "github:shusiwei/tiny",
     "weixin-js-sdk": "^1.0.7"
   },
