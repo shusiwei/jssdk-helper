@@ -1,10 +1,10 @@
+import _getIterator from 'babel-runtime/core-js/get-iterator';
+import _regeneratorRuntime from 'babel-runtime/regenerator';
+import _newArrowCheck from 'babel-runtime/helpers/newArrowCheck';
+import _asyncToGenerator from 'babel-runtime/helpers/asyncToGenerator';
+import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
+
 var _this = this;
-
-function _newArrowCheck(innerThis, boundThis) { if (innerThis !== boundThis) { throw new TypeError("Cannot instantiate an arrow function"); } }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /* ==================================================
  * @ 微信公众平台开发者文档
@@ -76,12 +76,12 @@ var JssdkHelper = function () {
   JssdkHelper.prototype.pushState = function () {
     _newArrowCheck(this, _this);
 
-    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(request) {
+    var _ref = _asyncToGenerator(_regeneratorRuntime.mark(function _callee(request) {
       var _this2 = this;
 
       var config, _ref2, data, appId, timestamp, nonceStr, signature, error;
 
-      return regeneratorRuntime.wrap(function _callee$(_context) {
+      return _regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -152,7 +152,7 @@ var JssdkHelper = function () {
     } else {
       var result = {};
 
-      for (var _iterator = keys, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+      for (var _iterator = keys, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _getIterator(_iterator);;) {
         var _ref4;
 
         if (_isArray) {
