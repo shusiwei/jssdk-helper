@@ -59,32 +59,31 @@ class JssdkHelper {
     this.pushState(request);
     this.updateShare(this.share);
   }
-  pushState(request) {
+  async pushState(request) {
     const config = this.config;
 
-    request().then(response => {
-      if (response.status >= 200 && response.status < 300) {
-        const {appId, timestamp, nonceStr, signature} = response.data;
+    try {
+      const {data} = await request();
+      const {appId, timestamp, nonceStr, signature} = data;
 
-        jssdk.config({
-          debug: false,
-          appId,
-          timestamp,
-          nonceStr,
-          signature,
-          jsApiList: config.apiList
-        });
+      jssdk.config({
+        debug: false,
+        appId,
+        timestamp,
+        nonceStr,
+        signature,
+        jsApiList: config.apiList
+      });
 
-        jssdk.error(res => {
-          console.error(res.errMsg);
-          window.setTimeout(() => {
-            this.pushState(request);
-          }, 12 * 1000);
-        });
-      } else {
-        throw new Error(response.statusText);
-      };
-    });
+      jssdk.error(res => {
+        console.error(res.errMsg);
+        window.setTimeout(() => {
+          this.pushState(request);
+        }, 12 * 1000);
+      });
+    } catch ({error}) {
+      throw error;
+    };
   }
   getState(...keys) {
     const state = this.state;

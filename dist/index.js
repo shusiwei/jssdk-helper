@@ -1,4 +1,8 @@
+var _this = this;
+
 function _newArrowCheck(innerThis, boundThis) { if (innerThis !== boundThis) { throw new TypeError("Cannot instantiate an arrow function"); } }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -69,46 +73,70 @@ var JssdkHelper = function () {
     this.updateShare(this.share);
   }
 
-  JssdkHelper.prototype.pushState = function pushState(request) {
-    var _this = this;
+  JssdkHelper.prototype.pushState = function () {
+    _newArrowCheck(this, _this);
 
-    var config = this.config;
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(request) {
+      var _this2 = this;
 
-    request().then(function (response) {
-      _newArrowCheck(this, _this);
+      var config, _ref2, data, appId, timestamp, nonceStr, signature, error;
 
-      if (response.status >= 200 && response.status < 300) {
-        var _response$data = response.data,
-            appId = _response$data.appId,
-            timestamp = _response$data.timestamp,
-            nonceStr = _response$data.nonceStr,
-            signature = _response$data.signature;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              config = this.config;
+              _context.prev = 1;
+              _context.next = 4;
+              return request();
+
+            case 4:
+              _ref2 = _context.sent;
+              data = _ref2.data;
+              appId = data.appId, timestamp = data.timestamp, nonceStr = data.nonceStr, signature = data.signature;
 
 
-        jssdk.config({
-          debug: false,
-          appId: appId,
-          timestamp: timestamp,
-          nonceStr: nonceStr,
-          signature: signature,
-          jsApiList: config.apiList
-        });
+              jssdk.config({
+                debug: false,
+                appId: appId,
+                timestamp: timestamp,
+                nonceStr: nonceStr,
+                signature: signature,
+                jsApiList: config.apiList
+              });
 
-        jssdk.error(function (res) {
-          _newArrowCheck(this, _this);
+              jssdk.error(function (res) {
+                console.error(res.errMsg);
+                window.setTimeout(function () {
+                  _this2.pushState(request);
+                }, 12 * 1000);
+              });
+              _context.next = 15;
+              break;
 
-          console.error(res.errMsg);
-          window.setTimeout(function () {
-            _newArrowCheck(this, _this);
+            case 11:
+              _context.prev = 11;
+              _context.t0 = _context['catch'](1);
+              error = _context.t0.error;
+              throw error;
 
-            this.pushState(request);
-          }.bind(this), 12 * 1000);
-        }.bind(this));
-      } else {
-        throw new Error(response.statusText);
-      };
-    }.bind(this));
-  };
+            case 15:
+              ;
+
+            case 16:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, this, [[1, 11]]);
+    }));
+
+    function pushState(_x3) {
+      return _ref.apply(this, arguments);
+    }
+
+    return pushState;
+  }.bind(_this)();
 
   JssdkHelper.prototype.getState = function getState() {
     var state = this.state;
@@ -125,18 +153,18 @@ var JssdkHelper = function () {
       var result = {};
 
       for (var _iterator = keys, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
-        var _ref;
+        var _ref4;
 
         if (_isArray) {
           if (_i >= _iterator.length) break;
-          _ref = _iterator[_i++];
+          _ref4 = _iterator[_i++];
         } else {
           _i = _iterator.next();
           if (_i.done) break;
-          _ref = _i.value;
+          _ref4 = _i.value;
         }
 
-        var key = _ref;
+        var key = _ref4;
 
         result[key] = state[key];
       };
@@ -146,7 +174,7 @@ var JssdkHelper = function () {
   };
 
   JssdkHelper.prototype.updateShare = function updateShare() {
-    var _this2 = this;
+    var _this3 = this;
 
     var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var state = this.state,
@@ -165,7 +193,7 @@ var JssdkHelper = function () {
     state.link = link;
 
     jssdk.ready(function () {
-      _newArrowCheck(this, _this2);
+      _newArrowCheck(this, _this3);
 
       var tempImg = new Image();
       tempImg.src = imgSrc;
