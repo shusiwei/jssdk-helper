@@ -52,14 +52,15 @@ class JssdkHelper {
     const showItem = isArray(options.showItem) ? options.showItem : ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
 
     this.jssdk = jssdk;
+    this.request = request;
     this.share = {title, desc, link, callback, imgUrl};
     this.config = {apiList, hideMenu, showBase, hideItem, showItem};
     this.state = {};
 
-    this.pushState(request);
+    this.updateConfig(request);
     this.updateShare(this.share);
   }
-  async pushState(request) {
+  async updateConfig(request = this.request) {
     const config = this.config;
 
     try {
@@ -78,7 +79,7 @@ class JssdkHelper {
       jssdk.error(res => {
         console.error(res.errMsg);
         window.setTimeout(() => {
-          this.pushState(request);
+          this.updateConfig(request);
         }, 12 * 1000);
       });
     } catch ({error}) {

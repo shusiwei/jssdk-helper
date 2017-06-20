@@ -65,19 +65,22 @@ var JssdkHelper = function () {
     var showItem = isArray(options.showItem) ? options.showItem : ['menuItem:share:appMessage', 'menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:favorite'];
 
     this.jssdk = jssdk;
+    this.request = request;
     this.share = { title: title, desc: desc, link: link, callback: callback, imgUrl: imgUrl };
     this.config = { apiList: apiList, hideMenu: hideMenu, showBase: showBase, hideItem: hideItem, showItem: showItem };
     this.state = {};
 
-    this.pushState(request);
+    this.updateConfig(request);
     this.updateShare(this.share);
   }
 
-  JssdkHelper.prototype.pushState = function () {
+  JssdkHelper.prototype.updateConfig = function () {
     _newArrowCheck(this, _this);
 
-    var _ref = _asyncToGenerator(_regeneratorRuntime.mark(function _callee(request) {
+    var _ref = _asyncToGenerator(_regeneratorRuntime.mark(function _callee() {
       var _this2 = this;
+
+      var request = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.request;
 
       var config, _ref2, data, appId, timestamp, nonceStr, signature, error;
 
@@ -108,7 +111,7 @@ var JssdkHelper = function () {
               jssdk.error(function (res) {
                 console.error(res.errMsg);
                 window.setTimeout(function () {
-                  _this2.pushState(request);
+                  _this2.updateConfig(request);
                 }, 12 * 1000);
               });
               _context.next = 15;
@@ -131,11 +134,11 @@ var JssdkHelper = function () {
       }, _callee, this, [[1, 11]]);
     }));
 
-    function pushState(_x3) {
+    function updateConfig() {
       return _ref.apply(this, arguments);
     }
 
-    return pushState;
+    return updateConfig;
   }.bind(_this)();
 
   JssdkHelper.prototype.getState = function getState() {
