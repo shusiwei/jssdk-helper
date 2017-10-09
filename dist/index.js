@@ -1,11 +1,7 @@
 import _getIterator from 'babel-runtime/core-js/get-iterator';
 import _regeneratorRuntime from 'babel-runtime/regenerator';
-import _newArrowCheck from 'babel-runtime/helpers/newArrowCheck';
 import _asyncToGenerator from 'babel-runtime/helpers/asyncToGenerator';
 import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
-
-var _this = this;
-
 /* ==================================================
  * @ 微信公众平台开发者文档
  * @ url : http://mp.weixin.qq.com/wiki/11/74ad127cc054f6b80759c40f77ec03db.html
@@ -75,10 +71,8 @@ var JssdkHelper = function () {
   }
 
   JssdkHelper.prototype.updateConfig = function () {
-    _newArrowCheck(this, _this);
-
-    var _ref = _asyncToGenerator(_regeneratorRuntime.mark(function _callee() {
-      var _this2 = this;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee() {
+      var _this = this;
 
       var request = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.request;
 
@@ -111,7 +105,7 @@ var JssdkHelper = function () {
               jssdk.error(function (res) {
                 console.error(res.errMsg);
                 window.setTimeout(function () {
-                  _this2.updateConfig(request);
+                  _this.updateConfig(request);
                 }, 12 * 1000);
               });
               _context.next = 15;
@@ -139,7 +133,7 @@ var JssdkHelper = function () {
     }
 
     return updateConfig;
-  }.bind(_this)();
+  }();
 
   JssdkHelper.prototype.getState = function getState() {
     var state = this.state;
@@ -177,7 +171,7 @@ var JssdkHelper = function () {
   };
 
   JssdkHelper.prototype.updateShare = function updateShare() {
-    var _this3 = this;
+    var _this2 = this;
 
     var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var state = this.state,
@@ -196,17 +190,15 @@ var JssdkHelper = function () {
     state.link = link;
 
     jssdk.ready(function () {
-      _newArrowCheck(this, _this3);
-
       var tempImg = new Image();
       tempImg.src = imgSrc;
 
       var imgUrl = tempImg.src;
 
-      jssdk.onMenuShareAppMessage(assign({ title: title, desc: desc, link: link, imgUrl: imgUrl, type: 'link', dataUrl: '' }, this.getCallback(callback, 'message')));
-      jssdk.onMenuShareTimeline(assign({ title: title, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'timeline')));
-      jssdk.onMenuShareQQ(assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'qq')));
-      jssdk.onMenuShareQZone(assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, this.getCallback(callback, 'qzone')));
+      jssdk.onMenuShareAppMessage(assign({ title: title, desc: desc, link: link, imgUrl: imgUrl, type: 'link', dataUrl: '' }, _this2.getCallback(callback, 'message')));
+      jssdk.onMenuShareTimeline(assign({ title: title, link: link, imgUrl: imgUrl }, _this2.getCallback(callback, 'timeline')));
+      jssdk.onMenuShareQQ(assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, _this2.getCallback(callback, 'qq')));
+      jssdk.onMenuShareQZone(assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, _this2.getCallback(callback, 'qzone')));
 
       if (config.hideMenu) {
         jssdk.showOptionMenu();
@@ -231,7 +223,7 @@ var JssdkHelper = function () {
           menuList: config.showItem
         });
       };
-    }.bind(this));
+    });
   };
 
   JssdkHelper.prototype.getCallback = function getCallback(callback, type) {
@@ -244,6 +236,5 @@ var JssdkHelper = function () {
   return JssdkHelper;
 }();
 
-;
-
 export default JssdkHelper;
+;

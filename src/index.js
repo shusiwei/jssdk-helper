@@ -32,7 +32,7 @@
 import {isArray, isBoolean, assign, isPlainObject, isFunction} from 'tiny';
 import jssdk from 'weixin-js-sdk';
 
-class JssdkHelper {
+export default class JssdkHelper {
   constructor(request, config = {}, options = {}) {
     const descElement = document.querySelector('meta[name="descripton"]');
 
@@ -159,5 +159,3 @@ class JssdkHelper {
     };
   }
 };
-
-export default JssdkHelper;
