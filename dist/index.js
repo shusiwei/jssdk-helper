@@ -1,3 +1,4 @@
+import _extends from 'babel-runtime/helpers/extends';
 import _getIterator from 'babel-runtime/core-js/get-iterator';
 import _regeneratorRuntime from 'babel-runtime/regenerator';
 import _asyncToGenerator from 'babel-runtime/helpers/asyncToGenerator';
@@ -33,13 +34,14 @@ import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
  *       - (hide : array) 隐藏的功能按钮
  *       - (show : array) 显示的功能按钮
  * ================================================== */
-import { isArray, isBoolean, assign, isPlainObject, isFunction } from 'tiny';
+import { isArray, isBoolean, isPlainObject, isFunction } from 'tiny';
 import jssdk from 'weixin-js-sdk';
 
 var JssdkHelper = function () {
   function JssdkHelper(request) {
     var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    var debug = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
     _classCallCheck(this, JssdkHelper);
 
@@ -63,7 +65,7 @@ var JssdkHelper = function () {
     this.jssdk = jssdk;
     this.request = request;
     this.share = { title: title, desc: desc, link: link, callback: callback, imgUrl: imgUrl };
-    this.config = { apiList: apiList, hideMenu: hideMenu, showBase: showBase, hideItem: hideItem, showItem: showItem };
+    this.config = { apiList: apiList, hideMenu: hideMenu, showBase: showBase, hideItem: hideItem, showItem: showItem, debug: debug };
     this.state = {};
 
     this.updateConfig(request);
@@ -94,7 +96,7 @@ var JssdkHelper = function () {
 
 
               jssdk.config({
-                debug: false,
+                debug: config.debug,
                 appId: appId,
                 timestamp: timestamp,
                 nonceStr: nonceStr,
@@ -195,10 +197,16 @@ var JssdkHelper = function () {
 
       var imgUrl = tempImg.src;
 
-      jssdk.onMenuShareAppMessage(assign({ title: title, desc: desc, link: link, imgUrl: imgUrl, type: 'link', dataUrl: '' }, _this2.getCallback(callback, 'message')));
-      jssdk.onMenuShareTimeline(assign({ title: title, link: link, imgUrl: imgUrl }, _this2.getCallback(callback, 'timeline')));
-      jssdk.onMenuShareQQ(assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, _this2.getCallback(callback, 'qq')));
-      jssdk.onMenuShareQZone(assign({ title: title, desc: desc, link: link, imgUrl: imgUrl }, _this2.getCallback(callback, 'qzone')));
+      var newState = _extends({}, state, { imgUrl: imgUrl });
+
+      jssdk.onMenuShareAppMessage(_extends({}, newState, { type: 'link', dataUrl: '' }, _this2.getCallback(callback, 'message')));
+      jssdk.onMenuShareTimeline(_extends({}, newState, _this2.getCallback(callback, 'timeline')));
+      jssdk.onMenuShareQQ(_extends({}, newState, _this2.getCallback(callback, 'qq')));
+      jssdk.onMenuShareQZone(_extends({}, newState, _this2.getCallback(callback, 'qzone')));
+
+      if (config.debug === true) {
+        console.warn('JssdkHelper:', newState);
+      };
 
       if (config.hideMenu) {
         jssdk.showOptionMenu();

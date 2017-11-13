@@ -29,11 +29,11 @@
  *       - (hide : array) 隐藏的功能按钮
  *       - (show : array) 显示的功能按钮
  * ================================================== */
-import {isArray, isBoolean, assign, isPlainObject, isFunction} from 'tiny';
+import {isArray, isBoolean, isPlainObject, isFunction} from 'tiny';
 import jssdk from 'weixin-js-sdk';
 
 export default class JssdkHelper {
-  constructor(request, config = {}, options = {}) {
+  constructor(request, config = {}, options = {}, debug = false) {
     const descElement = document.querySelector('meta[name="descripton"]');
 
     const title = config.title || document.title;
@@ -54,7 +54,7 @@ export default class JssdkHelper {
     this.jssdk = jssdk;
     this.request = request;
     this.share = {title, desc, link, callback, imgUrl};
-    this.config = {apiList, hideMenu, showBase, hideItem, showItem};
+    this.config = {apiList, hideMenu, showBase, hideItem, showItem, debug};
     this.state = {};
 
     this.updateConfig(request);
@@ -68,7 +68,7 @@ export default class JssdkHelper {
       const {appId, timestamp, nonceStr, signature} = data;
 
       jssdk.config({
-        debug: false,
+        debug: config.debug,
         appId,
         timestamp,
         nonceStr,
@@ -122,10 +122,16 @@ export default class JssdkHelper {
 
       const imgUrl = tempImg.src;
 
-      jssdk.onMenuShareAppMessage(assign({title, desc, link, imgUrl, type: 'link', dataUrl: ''}, this.getCallback(callback, 'message')));
-      jssdk.onMenuShareTimeline(assign({title, link, imgUrl}, this.getCallback(callback, 'timeline')));
-      jssdk.onMenuShareQQ(assign({title, desc, link, imgUrl}, this.getCallback(callback, 'qq')));
-      jssdk.onMenuShareQZone(assign({title, desc, link, imgUrl}, this.getCallback(callback, 'qzone')));
+      const newState = {...state, imgUrl};
+
+      jssdk.onMenuShareAppMessage({...newState, type: 'link', dataUrl: '', ...this.getCallback(callback, 'message')});
+      jssdk.onMenuShareTimeline({...newState, ...this.getCallback(callback, 'timeline')});
+      jssdk.onMenuShareQQ({...newState, ...this.getCallback(callback, 'qq')});
+      jssdk.onMenuShareQZone({...newState, ...this.getCallback(callback, 'qzone')});
+
+      if (config.debug === true) {
+        console.warn('JssdkHelper:', newState);
+      };
 
       if (config.hideMenu) {
         jssdk.showOptionMenu();
