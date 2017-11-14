@@ -204,10 +204,6 @@ var JssdkHelper = function () {
       jssdk.onMenuShareQQ(_extends({}, newState, _this2.getCallback(callback, 'qq')));
       jssdk.onMenuShareQZone(_extends({}, newState, _this2.getCallback(callback, 'qzone')));
 
-      if (config.debug === true) {
-        console.warn('JssdkHelper:', newState);
-      };
-
       if (config.hideMenu) {
         jssdk.showOptionMenu();
       } else {
