@@ -129,10 +129,6 @@ export default class JssdkHelper {
       jssdk.onMenuShareQQ({...newState, ...this.getCallback(callback, 'qq')});
       jssdk.onMenuShareQZone({...newState, ...this.getCallback(callback, 'qzone')});
 
-      if (config.debug === true) {
-        console.warn('JssdkHelper:', newState);
-      };
-
       if (config.hideMenu) {
         jssdk.showOptionMenu();
       } else {
